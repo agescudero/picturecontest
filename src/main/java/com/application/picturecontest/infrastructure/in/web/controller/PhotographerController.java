@@ -3,14 +3,16 @@ package com.application.picturecontest.infrastructure.in.web.controller;
 import com.application.picturecontest.application.usecase.addphotographer.AddPhotographerUseCase;
 import com.application.picturecontest.application.usecase.addphotographer.AddPhotographerInput;
 import com.application.picturecontest.application.usecase.addphotographer.AddPhotographerOutput;
+import com.application.picturecontest.application.usecase.becomepremium.BecomePremiumInput;
+import com.application.picturecontest.application.usecase.becomepremium.BecomePremiumUseCase;
+import com.application.picturecontest.application.usecase.findallphotographers.FindAllPhotographersOutput;
+import com.application.picturecontest.application.usecase.findallphotographers.FindAllPhotographersUseCase;
 import com.application.picturecontest.application.usecase.findphotographerbyid.FindPhotographerByIdInput;
 import com.application.picturecontest.application.usecase.findphotographerbyid.FindPhotographerByIdOutput;
 import com.application.picturecontest.application.usecase.findphotographerbyid.FindPhotographerByIdUseCase;
-import com.application.picturecontest.infrastructure.in.web.dto.FindPhotographerByIdResponse;
-import com.application.picturecontest.infrastructure.in.web.dto.PhotographerRequest;
-import com.application.picturecontest.infrastructure.in.web.dto.SavePhotographerResponse;
+import com.application.picturecontest.infrastructure.in.web.dto.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,14 +24,18 @@ public class PhotographerController {
 
     private final AddPhotographerUseCase addPhotographerUseCase;
     private final FindPhotographerByIdUseCase findPhotographerByIdUseCase;
+    private final FindAllPhotographersUseCase findAllPhotographersUseCase;
+    private final BecomePremiumUseCase becomePremiumUseCase;
 
-    public PhotographerController(AddPhotographerUseCase addPhotographerUseCase, FindPhotographerByIdUseCase findPhotographerByIdUseCase) {
+    public PhotographerController(AddPhotographerUseCase addPhotographerUseCase, FindPhotographerByIdUseCase findPhotographerByIdUseCase, FindAllPhotographersUseCase findAllPhotographersUseCase, BecomePremiumUseCase becomePremiumUseCase) {
         this.addPhotographerUseCase = addPhotographerUseCase;
         this.findPhotographerByIdUseCase = findPhotographerByIdUseCase;
+        this.findAllPhotographersUseCase = findAllPhotographersUseCase;
+        this.becomePremiumUseCase = becomePremiumUseCase;
     }
 
     @PostMapping
-    public ResponseEntity<SavePhotographerResponse> addPhotographer(@Valid @RequestBody PhotographerRequest request) {
+    public ResponseEntity<SavePhotographerResponse> addPhotographer(@Valid @RequestBody AddPhotographerRequest request) {
 
         AddPhotographerOutput output = addPhotographerUseCase.execute(
                 new AddPhotographerInput(
@@ -44,8 +50,20 @@ public class PhotographerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FindPhotographerByIdResponse> getById(@PathVariable UUID id){
+    public ResponseEntity<FindPhotographerByIdResponse> getById(@PathVariable UUID id) {
         FindPhotographerByIdOutput result = findPhotographerByIdUseCase.execute(new FindPhotographerByIdInput(id));
         return ResponseEntity.ok(FindPhotographerByIdResponse.from(result.photographer()));
+    }
+
+    @GetMapping
+    public ResponseEntity<FindAllPhotographersResponse> getAll() {
+        FindAllPhotographersOutput result = findAllPhotographersUseCase.execute();
+        return ResponseEntity.ok(new FindAllPhotographersResponse(result.photographers()));
+    }
+
+    @PostMapping("/{id}/premium")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void becomePremium(@PathVariable UUID id) {
+        becomePremiumUseCase.execute(new BecomePremiumInput(id));
     }
 }

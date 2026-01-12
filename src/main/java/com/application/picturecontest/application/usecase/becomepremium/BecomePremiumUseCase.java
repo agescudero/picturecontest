@@ -1,12 +1,10 @@
 package com.application.picturecontest.application.usecase.becomepremium;
 
-import com.application.picturecontest.application.usecase.addphotographer.AddPhotographerInput;
-import com.application.picturecontest.application.usecase.addphotographer.AddPhotographerOutput;
 import com.application.picturecontest.domain.model.participant.Photographer;
-import com.application.picturecontest.domain.model.valueobject.PersonInformation;
 import com.application.picturecontest.domain.port.PhotographerRepository;
 
-import java.util.UUID;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public class BecomePremiumUseCase {
 
@@ -17,17 +15,10 @@ public class BecomePremiumUseCase {
         this.repository = repository;
     }
 
-    public AddPhotographerOutput execute(AddPhotographerInput input) {
-
-        PersonInformation info = new PersonInformation(
-                input.name(),
-                input.lastname(),
-                input.location(),
-                input.email()
-        );
-
-        UUID savedId = repository.save(Photographer.create(info));
-
-        return new AddPhotographerOutput(savedId);
+    public void execute(BecomePremiumInput input) {
+        Optional<Photographer> result = repository.find(input.id());
+        Photographer photographer = result.orElseThrow((() -> new NoSuchElementException("Photographer not found")));
+        photographer.becomePremium();
+        repository.save(photographer);
     }
 }

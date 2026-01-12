@@ -7,6 +7,7 @@ import com.application.picturecontest.infrastructure.out.persistance.jpa.photogr
 import com.application.picturecontest.infrastructure.out.persistance.jpa.photographer.PhotographerMapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,5 +32,14 @@ public class PhotographerRepositoryAdapter implements PhotographerRepository {
         return repository
                 .findById(id)
                 .map(PhotographerMapper::toDomain);
+    }
+
+    @Override
+    public List<Photographer> findAll() {
+        return repository
+                .findAll()
+                .stream()
+                .map(PhotographerMapper::toDomain)
+                .toList();
     }
 }
