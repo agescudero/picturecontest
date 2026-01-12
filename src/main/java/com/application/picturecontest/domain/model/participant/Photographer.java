@@ -16,16 +16,20 @@ public class Photographer {
     private ContestLevel level;
 
 
-    private Photographer(PersonInformation information) {
-        this.id = UUID.randomUUID();
+    private Photographer(UUID id, PersonInformation information, Set<UUID> photos, ContestLevel level) {
+        this.id = id;
         this.information = information;
-        this.photos = new HashSet<>();
-        this.level = ContestLevel.FREE;
+        this.photos = photos;
+        this.level = level;
     }
 
     public static Photographer create(PersonInformation info) {
         Objects.requireNonNull(info, "Person Information cannot be null");
-        return new Photographer(info);
+        return new Photographer(UUID.randomUUID(), info, new HashSet<>(), ContestLevel.FREE);
+    }
+
+    public static Photographer of(UUID id, PersonInformation info, Set<UUID> photos, ContestLevel level){
+        return new Photographer(id, info, photos, level);
     }
 
     public void updatePersonInformation(PersonInformation updatedInfo){
