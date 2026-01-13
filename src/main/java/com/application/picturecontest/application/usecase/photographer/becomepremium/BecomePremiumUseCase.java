@@ -1,4 +1,4 @@
-package com.application.picturecontest.application.usecase.becomepremium;
+package com.application.picturecontest.application.usecase.photographer.becomepremium;
 
 import com.application.picturecontest.domain.model.participant.Photographer;
 import com.application.picturecontest.domain.port.PhotographerRepository;

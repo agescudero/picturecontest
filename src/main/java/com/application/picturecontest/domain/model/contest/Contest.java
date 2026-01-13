@@ -15,9 +15,9 @@ public class Contest {
     private UUID id;
     private ContestPrice price;
 
-    private final Set<Photographer> photographers = new HashSet<>();//Set<Participation>
+    private final Set<UUID> photographers = new HashSet<>();//Set<Participation>
     private final Set<UUID> juryMembers = new HashSet<>();
-    private final Set<Category> categories = new HashSet<>();
+    private final Set<UUID> categories = new HashSet<>();
     private final Set<UUID> phases = new HashSet<>();
     private final Set<ContestPhoto> contestPhotos = new HashSet<>();
     private final Set<ContestPhoto> oldContestPhotos = new HashSet<>();
@@ -31,13 +31,11 @@ public class Contest {
         return new Contest(UUID.randomUUID(), price);
     }
 
-    public Photographer addPhotographer(PersonInformation info) {
-        Objects.requireNonNull(info, "Person information cannot be null");
-        Photographer photographer = Photographer.create(info);
-        if (!this.photographers.add(photographer)) {
+    public void addPhotographerToContest(UUID id) {
+        Objects.requireNonNull(id, "PhotographerId cannot be null");
+        if (!this.photographers.add(id)) {
             throw new IllegalStateException("Photographer cannot be duplicated");
         }
-        return photographer;
     }
 
     public void addJuryMember(UUID juryId) {
@@ -47,22 +45,29 @@ public class Contest {
         }
     }
 
-    public Category addCategory(String name, String description, ContestLevel level) {
-        validateNotNull(name, "Name cannot be null");
-        validateNotNull(description, "Description cannot be null");
-        validateNotNull(level, "Contest level cannot be null");
-        Category category = Category.create(name, description, level);
+//    public void addCategory(String name, String description, ContestLevel level) {
+//        validateNotNull(name, "Name cannot be null");
+//        validateNotNull(description, "Description cannot be null");
+//        validateNotNull(level, "Contest level cannot be null");
+//        Category category = Category.create(name, description, level);
+//
+//        if (categories.stream().anyMatch(c -> name.equals(c.getName()))
+//        ) {
+//            throw new IllegalStateException("Category with name " + name + " already exist");
+//        }
+//
+//        if (!this.categories.add(category)) {
+//            throw new IllegalStateException("Category cannot be duplicated");
+//        }
+//
+//        return category;
+//    }
 
-        if (categories.stream().anyMatch(c -> name.equals(c.getName()))
-        ) {
-            throw new IllegalStateException("Category with name " + name + " already exist");
-        }
-
-        if (!this.categories.add(category)) {
+    public void addCategoryToContest(UUID categoryId){
+        Objects.requireNonNull(categoryId, "CategoryId cannot be null");
+        if (!this.categories.add(categoryId)) {
             throw new IllegalStateException("Category cannot be duplicated");
         }
-
-        return category;
     }
 
     public void addPhase(UUID phaseId) {
@@ -72,35 +77,17 @@ public class Contest {
         }
     }
 
-    public ContestPhoto submitPhoto(UUID photographerId, UUID categoryId) {
+    public ContestPhoto submitPhoto(Photographer photographer, Category category) {
 
-        Photographer photographer = findPhotographerOrThrow(photographerId);
-        Category category = findCategoryOrThrow(categoryId);
+        if(!photographers.contains(photographer.getId())) throw new IllegalArgumentException("Photographer not valid");
+        if(!categories.contains(category.getId())) throw new IllegalArgumentException("Category not valid");
 
         ensurePhotographerCanSubmitToCategory(photographer, category);
 
-        ContestPhoto contestPhoto = new ContestPhoto(photographerId, categoryId);
+        ContestPhoto contestPhoto = new ContestPhoto(photographer.getId(), category.getId());
         contestPhotos.add(contestPhoto);
 
         return contestPhoto;
-    }
-
-    public void deletePhoto(UUID photoId){}
-
-    private Photographer findPhotographerOrThrow(UUID photographerId) {
-        return photographers.stream()
-                .filter(p -> p.getId().equals(photographerId))
-                .findFirst()
-                .orElseThrow(() ->
-                        new IllegalArgumentException("Photographer not valid"));
-    }
-
-    private Category findCategoryOrThrow(UUID categoryId) {
-        return categories.stream()
-                .filter(c -> c.getId().equals(categoryId))
-                .findFirst()
-                .orElseThrow(() ->
-                        new IllegalArgumentException("Category doesn't exist"));
     }
 
     private void ensurePhotographerCanSubmitToCategory(
@@ -114,13 +101,17 @@ public class Contest {
         }
     }
 
+    public void deletePhoto(UUID photoId){}
+
+
+
     private static void validateNotNull(Object value, String message) {
         if (value == null) {
             throw new IllegalArgumentException(message);
         }
     }
 
-    public Set<Photographer> getPhotographers() {
+    public Set<UUID> getPhotographers() {
         return photographers;
     }
 
@@ -128,7 +119,7 @@ public class Contest {
         return juryMembers;
     }
 
-    public Set<Category> getCategories() {
+    public Set<UUID> getCategories() {
         return categories;
     }
 

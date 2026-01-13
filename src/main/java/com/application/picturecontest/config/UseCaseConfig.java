@@ -1,9 +1,9 @@
 package com.application.picturecontest.config;
 
-import com.application.picturecontest.application.usecase.addphotographer.AddPhotographerUseCase;
-import com.application.picturecontest.application.usecase.becomepremium.BecomePremiumUseCase;
-import com.application.picturecontest.application.usecase.findallphotographers.FindAllPhotographersUseCase;
-import com.application.picturecontest.application.usecase.findphotographerbyid.FindPhotographerByIdUseCase;
+import com.application.picturecontest.application.usecase.photographer.addphotographer.AddPhotographerUseCase;
+import com.application.picturecontest.application.usecase.photographer.becomepremium.BecomePremiumUseCase;
+import com.application.picturecontest.application.usecase.photographer.findallphotographers.FindAllPhotographersUseCase;
+import com.application.picturecontest.application.usecase.photographer.findphotographerbyid.FindPhotographerByIdUseCase;
 import com.application.picturecontest.domain.port.PhotographerRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

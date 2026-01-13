@@ -1,5 +1,8 @@
 package com.application.picturecontest.application.usecase.findphotographerbyid;
 
+import com.application.picturecontest.application.usecase.photographer.findphotographerbyid.FindPhotographerByIdInput;
+import com.application.picturecontest.application.usecase.photographer.findphotographerbyid.FindPhotographerByIdOutput;
+import com.application.picturecontest.application.usecase.photographer.findphotographerbyid.FindPhotographerByIdUseCase;
 import com.application.picturecontest.domain.model.participant.Photographer;
 import com.application.picturecontest.domain.model.valueobject.PersonInformation;
 import com.application.picturecontest.domain.port.PhotographerRepository;

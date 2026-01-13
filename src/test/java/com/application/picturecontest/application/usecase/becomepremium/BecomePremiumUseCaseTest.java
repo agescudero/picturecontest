@@ -1,5 +1,7 @@
 package com.application.picturecontest.application.usecase.becomepremium;
 
+import com.application.picturecontest.application.usecase.photographer.becomepremium.BecomePremiumInput;
+import com.application.picturecontest.application.usecase.photographer.becomepremium.BecomePremiumUseCase;
 import com.application.picturecontest.domain.model.participant.Photographer;
 import com.application.picturecontest.domain.model.valueobject.ContestLevel;
 import com.application.picturecontest.domain.model.valueobject.PersonInformation;

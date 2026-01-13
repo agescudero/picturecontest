@@ -1,15 +1,15 @@
 package com.application.picturecontest.infrastructure.in.web.controller;
 
-import com.application.picturecontest.application.usecase.addphotographer.AddPhotographerUseCase;
-import com.application.picturecontest.application.usecase.addphotographer.AddPhotographerInput;
-import com.application.picturecontest.application.usecase.addphotographer.AddPhotographerOutput;
-import com.application.picturecontest.application.usecase.becomepremium.BecomePremiumInput;
-import com.application.picturecontest.application.usecase.becomepremium.BecomePremiumUseCase;
-import com.application.picturecontest.application.usecase.findallphotographers.FindAllPhotographersOutput;
-import com.application.picturecontest.application.usecase.findallphotographers.FindAllPhotographersUseCase;
-import com.application.picturecontest.application.usecase.findphotographerbyid.FindPhotographerByIdInput;
-import com.application.picturecontest.application.usecase.findphotographerbyid.FindPhotographerByIdOutput;
-import com.application.picturecontest.application.usecase.findphotographerbyid.FindPhotographerByIdUseCase;
+import com.application.picturecontest.application.usecase.photographer.addphotographer.AddPhotographerUseCase;
+import com.application.picturecontest.application.usecase.photographer.addphotographer.AddPhotographerInput;
+import com.application.picturecontest.application.usecase.photographer.addphotographer.AddPhotographerOutput;
+import com.application.picturecontest.application.usecase.photographer.becomepremium.BecomePremiumInput;
+import com.application.picturecontest.application.usecase.photographer.becomepremium.BecomePremiumUseCase;
+import com.application.picturecontest.application.usecase.photographer.findallphotographers.FindAllPhotographersOutput;
+import com.application.picturecontest.application.usecase.photographer.findallphotographers.FindAllPhotographersUseCase;
+import com.application.picturecontest.application.usecase.photographer.findphotographerbyid.FindPhotographerByIdInput;
+import com.application.picturecontest.application.usecase.photographer.findphotographerbyid.FindPhotographerByIdOutput;
+import com.application.picturecontest.application.usecase.photographer.findphotographerbyid.FindPhotographerByIdUseCase;
 import com.application.picturecontest.infrastructure.in.web.dto.*;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

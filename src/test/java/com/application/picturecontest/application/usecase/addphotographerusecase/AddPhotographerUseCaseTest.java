@@ -1,8 +1,8 @@
 package com.application.picturecontest.application.usecase.addphotographerusecase;
 
-import com.application.picturecontest.application.usecase.addphotographer.AddPhotographerUseCase;
-import com.application.picturecontest.application.usecase.addphotographer.AddPhotographerInput;
-import com.application.picturecontest.application.usecase.addphotographer.AddPhotographerOutput;
+import com.application.picturecontest.application.usecase.photographer.addphotographer.AddPhotographerUseCase;
+import com.application.picturecontest.application.usecase.photographer.addphotographer.AddPhotographerInput;
+import com.application.picturecontest.application.usecase.photographer.addphotographer.AddPhotographerOutput;
 import com.application.picturecontest.domain.model.valueobject.PersonInformation;
 import com.application.picturecontest.domain.port.PhotographerRepository;
 import org.junit.jupiter.api.BeforeEach;

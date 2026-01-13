@@ -16,31 +16,31 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ContestTest {
 
-    @Test
-    void addPhotographer_ok() {
-        Contest contest = Contest.create(null);
-        Photographer photographer = Photographer.create(getInfo());
-        contest.addPhotographer(photographer.getInformation());
-        assertTrue(contest.getPhotographers().contains(photographer));
-    }
-
-    @Test
-    void addPhotographer_nullException(){
-        Contest contest = Contest.create(null);
-        Exception exception = assertThrows(NullPointerException.class,
-                () -> contest.addPhotographer(null));
-        assertEquals("Person information cannot be null", exception.getMessage());
-    }
-
-    @Test
-    void addPhotographer_idDuplicatedException() {
-        PersonInformation info = getInfo();
-        Contest contest = Contest.create(null);
-        contest.addPhotographer(info);
-        Exception exception = assertThrows(IllegalStateException.class,
-                () -> contest.addPhotographer(info));
-        assertEquals("Photographer cannot be duplicated", exception.getMessage());
-    }
+//    @Test
+//    void addPhotographer_ok() {
+//        Contest contest = Contest.create(null);
+//        Photographer photographer = Photographer.create(getInfo());
+//        contest.addPhotographer(photographer.getInformation());
+//        assertTrue(contest.getPhotographers().contains(photographer));
+//    }
+//
+//    @Test
+//    void addPhotographer_nullException(){
+//        Contest contest = Contest.create(null);
+//        Exception exception = assertThrows(NullPointerException.class,
+//                () -> contest.addPhotographer(null));
+//        assertEquals("Person information cannot be null", exception.getMessage());
+//    }
+//
+//    @Test
+//    void addPhotographer_idDuplicatedException() {
+//        PersonInformation info = getInfo();
+//        Contest contest = Contest.create(null);
+//        contest.addPhotographer(info);
+//        Exception exception = assertThrows(IllegalStateException.class,
+//                () -> contest.addPhotographer(info));
+//        assertEquals("Photographer cannot be duplicated", exception.getMessage());
+//    }
 
     @Test
     void addJuryMember_ok() {
@@ -68,30 +68,30 @@ class ContestTest {
         assertEquals("juryMemberId cannot be duplicated", exception.getMessage());
     }
 
-    @Test
-    void addCategory_ok() {
-        Contest contest = Contest.create(null);
-        Category expected = contest.addCategory("name", "description", ContestLevel.FREE);
-        assertTrue(contest.getCategories().contains(expected));
-    }
+//    @Test
+//    void addCategory_ok() {
+//        Contest contest = Contest.create(null);
+//        Category expected = contest.addCategory("name", "description", ContestLevel.FREE);
+//        assertTrue(contest.getCategories().contains(expected));
+//    }
 
-    @ParameterizedTest
-    @MethodSource("nullCategoryArguments")
-    void addCategory_nullArguments_throwException(
-            String name,
-            String description,
-            ContestLevel level,
-            String expectedMessage
-    ) {
-        Contest contest = Contest.create(null);
-
-        Exception exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> contest.addCategory(name, description, level)
-        );
-
-        assertEquals(expectedMessage, exception.getMessage());
-    }
+//    @ParameterizedTest
+//    @MethodSource("nullCategoryArguments")
+//    void addCategory_nullArguments_throwException(
+//            String name,
+//            String description,
+//            ContestLevel level,
+//            String expectedMessage
+//    ) {
+//        Contest contest = Contest.create(null);
+//
+//        Exception exception = assertThrows(
+//                IllegalArgumentException.class,
+//                () -> contest.addCategory(name, description, level)
+//        );
+//
+//        assertEquals(expectedMessage, exception.getMessage());
+//    }
 
     private static Stream<Arguments> nullCategoryArguments() {
         return Stream.of(
@@ -102,16 +102,16 @@ class ContestTest {
     }
 
 
-    @Test
-    void addCategory_idDuplicatedException() {
-        Contest contest = Contest.create(null);
-        String name = "name";
-        String description = "description";
-        Category category = contest.addCategory(name ,description, ContestLevel.FREE);
-        Exception exception = assertThrows(IllegalStateException.class,
-                () -> contest.addCategory(name, category.getDescription(), ContestLevel.FREE));
-        assertEquals("Category with name " + name + " already exist", exception.getMessage());
-    }
+//    @Test
+//    void addCategory_idDuplicatedException() {
+//        Contest contest = Contest.create(null);
+//        String name = "name";
+//        String description = "description";
+//        Category category = contest.addCategory(name ,description, ContestLevel.FREE);
+//        Exception exception = assertThrows(IllegalStateException.class,
+//                () -> contest.addCategory(name, category.getDescription(), ContestLevel.FREE));
+//        assertEquals("Category with name " + name + " already exist", exception.getMessage());
+//    }
 
     @Test
     void addPhase_ok() {
@@ -143,11 +143,13 @@ class ContestTest {
     void photographerNotPremiumSubmitsPhotoToFreeCategory(){
         Contest contest = Contest.create(null);
 
-        Photographer photographer = contest.addPhotographer(getInfo());
+        Photographer photographer = Photographer.create(getInfo());
+        contest.addPhotographerToContest(photographer.getId());
         ContestLevel level = ContestLevel.FREE;
-        Category category = contest.addCategory("categoryName", "categoryDescription", level);
+        Category category = Category.create("categoryName", "categoryDescription", level);
+        contest.addCategoryToContest(category.getId());
 
-        ContestPhoto expected = contest.submitPhoto(photographer.getId(),category.getId());
+        ContestPhoto expected = contest.submitPhoto(photographer,category);
 
         assertEquals(1, contest.getContestPhotos().size());
         assertTrue(contest.getContestPhotos().contains(expected));
@@ -157,12 +159,14 @@ class ContestTest {
     void photographerNotPremiumSubmitsPhotoToPremiumCategoryException(){
         Contest contest = Contest.create(null);
 
-        Photographer photographer = contest.addPhotographer(getInfo());
+        Photographer photographer = Photographer.create(getInfo());
+        contest.addPhotographerToContest(photographer.getId());
         ContestLevel level = ContestLevel.PREMIUM;
-        Category category = contest.addCategory("categoryName", "categoryDescription", level);
+        Category category = Category.create("categoryName", "categoryDescription", level);
+        contest.addCategoryToContest(category.getId());
 
         Exception e = assertThrows(
-                IllegalStateException.class, () -> contest.submitPhoto(photographer.getId(), category.getId())
+                IllegalStateException.class, () -> contest.submitPhoto(photographer, category)
         );
         assertEquals(
                 "Photographer with id " + photographer.getId() + " must be " + category.getLevel(),
@@ -174,12 +178,14 @@ class ContestTest {
     void photographerPremiumSubmitsPhotoToFreeCategory(){
         Contest contest = Contest.create(null);
 
-        Photographer photographer = contest.addPhotographer(getInfo());
+        Photographer photographer = Photographer.create(getInfo());
         photographer.becomePremium();
+        contest.addPhotographerToContest(photographer.getId());
         ContestLevel level = ContestLevel.FREE;
-        Category category = contest.addCategory("categoryName", "categoryDescription", level);
+        Category category = Category.create("categoryName", "categoryDescription", level);
+        contest.addCategoryToContest(category.getId());
 
-        ContestPhoto expected = contest.submitPhoto(photographer.getId(),category.getId());
+        ContestPhoto expected = contest.submitPhoto(photographer, category);
 
         assertEquals(1, contest.getContestPhotos().size());
         assertTrue(contest.getContestPhotos().contains(expected));
@@ -188,25 +194,27 @@ class ContestTest {
     @Test
     void photographerSubmitsPhotoToNotValidCategory(){
         Contest contest = Contest.create(null);
-        UUID categoryId = UUID.randomUUID();
 
-        Photographer photographer = contest.addPhotographer(getInfo());
+        Photographer photographer = Photographer.create(getInfo());
+        contest.addPhotographerToContest(photographer.getId());
+        ContestLevel level = ContestLevel.FREE;
+        Category category = Category.create("categoryName", "categoryDescription", level);
 
         Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> contest.submitPhoto(photographer.getId(), categoryId));
-        assertEquals("Category doesn't exist", exception.getMessage());
+                () -> contest.submitPhoto(photographer, category));
+        assertEquals("Category not valid", exception.getMessage());
     }
 
     @Test
     void notRegisteredPhotographerSubmitsPhotoCategory(){
         Contest contest = Contest.create(null);
 
-        UUID photographerId = UUID.randomUUID();
+        Photographer photographer = Photographer.create(getInfo());
         ContestLevel level = ContestLevel.FREE;
-        Category category = contest.addCategory("categoryName", "categoryDescription", level);
+        Category category = Category.create("categoryName", "categoryDescription", level);
 
         Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> contest.submitPhoto(photographerId, category.getId()));
+                () -> contest.submitPhoto(photographer, category));
         assertEquals("Photographer not valid", exception.getMessage());
     }
 

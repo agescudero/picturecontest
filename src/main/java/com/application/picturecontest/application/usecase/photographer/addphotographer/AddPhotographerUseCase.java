@@ -1,4 +1,4 @@
-package com.application.picturecontest.application.usecase.addphotographer;
+package com.application.picturecontest.application.usecase.photographer.addphotographer;
 
 import com.application.picturecontest.domain.model.participant.Photographer;
 import com.application.picturecontest.domain.model.valueobject.PersonInformation;

@@ -1,4 +1,4 @@
-package com.application.picturecontest.application.usecase.findphotographerbyid;
+package com.application.picturecontest.application.usecase.photographer.findphotographerbyid;
 
 import com.application.picturecontest.domain.model.participant.Photographer;
 import com.application.picturecontest.domain.port.PhotographerRepository;
