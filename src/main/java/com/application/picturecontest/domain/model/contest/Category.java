@@ -20,8 +20,12 @@ public class Category {
         this.level = level;
     }
 
-    public static Category create(String name, String description, ContestLevel level){
-        return new Category(UUID.randomUUID(),name, description, level);
+    public static Category create(String name, String description, ContestLevel level) {
+        return new Category(UUID.randomUUID(), name, description, level);
+    }
+
+    public static Category of(UUID id, String name, String description, ContestLevel level) {
+        return new Category(id, name, description, level);
     }
 
     public UUID getId() {

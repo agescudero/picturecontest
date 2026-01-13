@@ -27,8 +27,25 @@ public class Contest {
         this.price = price;
     }
 
-    public static Contest create(ContestPrice price){
+    private Contest(UUID id,
+                    ContestPrice price,
+                    Set<UUID> photographers,
+                    Set<UUID> categories
+    ) {
+        this.id = Objects.requireNonNull(id, "contestId cannot be null");
+        this.price = price;
+    }
+
+    public static Contest create(ContestPrice price) {
         return new Contest(UUID.randomUUID(), price);
+    }
+
+    public static Contest of(UUID id,
+                             ContestPrice price,
+                             Set<UUID> photographers,
+                             Set<UUID> categories
+    ) {
+        return new Contest(id, price, photographers, categories);
     }
 
     public void addPhotographerToContest(UUID id) {
@@ -63,7 +80,7 @@ public class Contest {
 //        return category;
 //    }
 
-    public void addCategoryToContest(UUID categoryId){
+    public void addCategoryToContest(UUID categoryId) {
         Objects.requireNonNull(categoryId, "CategoryId cannot be null");
         if (!this.categories.add(categoryId)) {
             throw new IllegalStateException("Category cannot be duplicated");
@@ -79,8 +96,8 @@ public class Contest {
 
     public ContestPhoto submitPhoto(Photographer photographer, Category category) {
 
-        if(!photographers.contains(photographer.getId())) throw new IllegalArgumentException("Photographer not valid");
-        if(!categories.contains(category.getId())) throw new IllegalArgumentException("Category not valid");
+        if (!photographers.contains(photographer.getId())) throw new IllegalArgumentException("Photographer not valid");
+        if (!categories.contains(category.getId())) throw new IllegalArgumentException("Category not valid");
 
         ensurePhotographerCanSubmitToCategory(photographer, category);
 
@@ -101,14 +118,22 @@ public class Contest {
         }
     }
 
-    public void deletePhoto(UUID photoId){}
-
+    public void deletePhoto(UUID photoId) {
+    }
 
 
     private static void validateNotNull(Object value, String message) {
         if (value == null) {
             throw new IllegalArgumentException(message);
         }
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public ContestPrice getPrice() {
+        return price;
     }
 
     public Set<UUID> getPhotographers() {

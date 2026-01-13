@@ -10,7 +10,10 @@ import com.application.picturecontest.application.usecase.photographer.findallph
 import com.application.picturecontest.application.usecase.photographer.findphotographerbyid.FindPhotographerByIdInput;
 import com.application.picturecontest.application.usecase.photographer.findphotographerbyid.FindPhotographerByIdOutput;
 import com.application.picturecontest.application.usecase.photographer.findphotographerbyid.FindPhotographerByIdUseCase;
-import com.application.picturecontest.infrastructure.in.web.dto.*;
+import com.application.picturecontest.infrastructure.in.web.dto.photographer.AddPhotographerRequest;
+import com.application.picturecontest.infrastructure.in.web.dto.photographer.FindAllPhotographersResponse;
+import com.application.picturecontest.infrastructure.in.web.dto.photographer.FindPhotographerByIdResponse;
+import com.application.picturecontest.infrastructure.in.web.dto.photographer.AddPhotographerResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +38,7 @@ public class PhotographerController {
     }
 
     @PostMapping
-    public ResponseEntity<SavePhotographerResponse> addPhotographer(@Valid @RequestBody AddPhotographerRequest request) {
+    public ResponseEntity<AddPhotographerResponse> addPhotographer(@Valid @RequestBody AddPhotographerRequest request) {
 
         AddPhotographerOutput output = addPhotographerUseCase.execute(
                 new AddPhotographerInput(
@@ -46,7 +49,7 @@ public class PhotographerController {
                 )
         );
 
-        return ResponseEntity.ok(new SavePhotographerResponse(output.id()));
+        return ResponseEntity.ok(new AddPhotographerResponse(output.id()));
     }
 
     @GetMapping("/{id}")

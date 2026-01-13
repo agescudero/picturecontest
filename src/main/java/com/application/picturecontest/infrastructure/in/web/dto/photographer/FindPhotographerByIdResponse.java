@@ -1,4 +1,4 @@
-package com.application.picturecontest.infrastructure.in.web.dto;
+package com.application.picturecontest.infrastructure.in.web.dto.photographer;
 
 import com.application.picturecontest.domain.model.participant.Photographer;
 import com.application.picturecontest.domain.model.valueobject.ContestLevel;

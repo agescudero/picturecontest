@@ -1,4 +1,4 @@
-package com.application.picturecontest.infrastructure.in.web.dto;
+package com.application.picturecontest.infrastructure.in.web.dto.photographer;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
